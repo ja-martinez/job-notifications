@@ -1,0 +1,11 @@
+{
+  "name": "job-notifications-trial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "greenhouse-api-trial.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "",
+  "license": "ISC"
+}
