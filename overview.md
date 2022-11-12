@@ -1,5 +1,12 @@
 # Job Notifications
 
+## TODO
+
+1. Implement DynamoDB table with local code
+2. implement code in a Lambda Function
+3. figure out how to trigger Lambda Function
+4. figure out how to set up CI/CD to change function - maybe webhooks
+
 ## Overview
 
 Create a service that checks some job boards everyday and sends an email when a new job is posted.
@@ -37,6 +44,10 @@ All API sources will have info like:
 
 If we choose option 2, we can also save relevant jobs to a database so that we can access them in some sort of page
 
+### Workflow
+
+To add a new company, I'll have understand its API and create a function that extracts a list of jobs with the necessary data. I would then modify the main script by adding a company name (to fetch jobs from database) and the function used to fetch data.
+
 ### Program Timeline
 
 For comparing previous jobs to current jobs, we are essentially trying to get the exclusives (only in prevJobs and only in currJobs) in an intersection between thos jobs.
@@ -57,14 +68,15 @@ For comparing previous jobs to current jobs, we are essentially trying to get th
 
 ### Database
 
-Jobs will have the following properties:
+Jobs will have the following Schema:
 
-* id
-* creation date
+* companyName - partition key
+* jobID - sortKey
 * title
 * url
-* company
-* Location
+* locations
+
+
 
 I may also add a property like "experience needed" or description/content.
 
@@ -72,13 +84,19 @@ Since I'm not exactly sure of what features I may add in the future, I'll use a 
 
 ### Running it
 
-I think I'll try to use lambda functions since there's no need to run a server all the time.
+I think I'll try to use lambda functions since there's no need to run a server all the time. I could also use a container with AWS Fargate.
+
+### Viewing current jobs portal
+
+Whenerver the database is updated (new jobs or jobs are removed) then I can trigger a build of a static site.
 
 ### Filtering
 
 We can filter out jobs that have the words "senior" and "staff" in their titles.
 
 We can filter by api specific data like category and location, but we can also try to use the description to determine whether or not the position requires a lot of experience. At the very least, maybe we could extract some sort of snippet of the description that mentions years of experience. We could do this kind of processing with gpt-3. I would have to figure out how to ask it a question from some input.
+
+
 
 ## Technical Learning Opportunities
 
@@ -91,3 +109,7 @@ Server vs serverless
 database service vs self hosting
 
 Gpt-3
+
+## Greenhouse API Docs
+
+https://developers.greenhouse.io/job-board.html#list-jobs

@@ -7,5 +7,10 @@
     "test": "jest"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.209.0",
+    "@aws-sdk/lib-dynamodb": "^3.209.0"
+  },
+  "type": "module"
 }

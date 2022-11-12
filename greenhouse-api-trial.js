@@ -8,20 +8,23 @@ The second goal is to implement the updating of previous jobs. Do this by creati
 currJobs and prevJobs are hash maps to make lookup faster
 */
 
-const fs = require("fs/promises");
+import fs from "fs/promises";
+
 
 async function getCurrentJobs() {
-  const boardToken = "schrdinger";
-  const url = `https://boards-api.greenhouse.io/v1/boards/${boardToken}/jobs`;
+  const COMPANY = "schrodinger"
+  const BOARD_TOKEN = "schrdinger";
+  const URL = `https://boards-api.greenhouse.io/v1/boards/${BOARD_TOKEN}/jobs`;
 
-  const jobs = await fetch(url)
+  const jobs = await fetch(URL)
     .then((response) => response.json())
     .then((data) => data.jobs);
 
   // filter relevant jobs and data
   const filteredJobsArray = filterJobs(jobs).map((job) => {
     return {
-      id: job.id,
+      jobID: job.id,
+      companyName: COMPANY,
       title: job.title,
       url: job.absolute_url,
       locations: job.location.name,
@@ -29,7 +32,7 @@ async function getCurrentJobs() {
   });
 
   const filteredJobsObj = {};
-  filteredJobsArray.forEach((job) => (filteredJobsObj[job.id] = job));
+  filteredJobsArray.forEach((job) => (filteredJobsObj[job.jobID] = job));
 
   return filteredJobsObj;
 }
@@ -120,4 +123,4 @@ function getUniqueElements(obj1, obj2) {
   return exclusiveElements;
 }
 
-trial();
+getCurrentJobs().then((jobs) => console.log(jobs))
