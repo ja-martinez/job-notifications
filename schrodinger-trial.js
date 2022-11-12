@@ -1,17 +1,13 @@
 /*
-Trial of how to implement the job checking for the greenhouse API.
-
-The primary goal is to get current jobs and filter them out.
-
-The second goal is to implement the updating of previous jobs. Do this by creating a mock function that gets previous jobs from database. There should be some extra jobs and some missing jobs in there to simulate the adding and removal of jobs.
-
-currJobs and prevJobs are hash maps to make lookup faster
+Goals:
+1. combine current and previous jobs
+2. implement email notifications
 */
 
-import fs from "fs/promises";
+import {updateDB, getPrevJobs} from './dynamodb-functions.js';
 
 // returns jobs object with jobID as key
-async function getCurrentJobs() {
+async function getCurrJobs() {
   const COMPANY = "schrodinger"
   const BOARD_TOKEN = "schrdinger";
   const URL = `https://boards-api.greenhouse.io/v1/boards/${BOARD_TOKEN}/jobs`;
@@ -78,12 +74,10 @@ function filterJobs(jobs) {
   }
 }
 
-
-// Testing
 async function trial() {
   const [prevJobs, currJobs] = await Promise.all([
-    getPreviousJobs(),
-    getCurrentJobs(),
+    getPrevJobs(),
+    getCurrJobs(),
   ]).catch((err) => new Error(err));
 
   // look for new jobs
@@ -92,8 +86,15 @@ async function trial() {
   // look for jobs that were removed
   const removedJobs = getUniqueElements(prevJobs, currJobs);
 
+  if (newJobs.length === 0 && removedJobs.length === 0) {
+    console.log("nothing changed");
+    return
+  }
+
   console.log(`New Jobs: ${JSON.stringify(newJobs)}`);
   console.log(`Removed Jobs: ${JSON.stringify(removedJobs)}`);
+
+  updateDB(newJobs, removedJobs);
 }
 
 function getUniqueElements(obj1, obj2) {
@@ -109,4 +110,4 @@ function getUniqueElements(obj1, obj2) {
   return exclusiveElements;
 }
 
-getCurrentJobs().then((jobs) => console.log(jobs))
+trial()
