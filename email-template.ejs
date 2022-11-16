@@ -1,4 +1,21 @@
-<html>
+<!DOCTYPE html>
+  <head>
+    <style>
+      ul {
+        list-style-type: none;
+        padding-left: 0;
+      }
+      ul.companies > li {
+        margin-left: 0;
+      }
+      ul.jobs {
+        list-style-type: disc;
+      }
+      li > p {
+        margin-bottom: 0;
+      }
+      </style>
+  </head>
   <body>
     <p>Good Morning Alejandro,</p>
     <p>
@@ -6,29 +23,29 @@
       in their job postings.
     </p>
     <% if (companies.length > 0) {%> 
-      <ul style="list-style: none; padding-left: 0">
+      <ul class="companies">
         <% for (const company of companies) { %> 
-          <li>
+          <li class="company">
             <h3><%= company.companyName %></h3>
             <% if (company.newJobs.length > 0) { %> 
-              <p><%= company.newJobs.length %> <%= company.newJobs.length > 1 ? "were" : "was" %> added</p>
-              <ul>
+              <p><%= company.newJobs.length %> <%= company.newJobs.length > 1 ? "jobs were" : "job was" %> added</p>
+              <ul class="jobs">
                 <% for (const newJob of company.newJobs) { %> 
                   <li>
                     <a href=<%= newJob.url %> >
-                      <p><b><%= newJob.title %></b> - <%= newJob.locations %></p>
+                      <b><%= newJob.title %></b> - <%= newJob.locations %>
                     </a>
                   </li>
                 <% } %> 
               </ul>
             <% } %>
             <% if (company.removedJobs.length > 0) { %> 
-              <p><%= company.removedJobs.length %> <%= company.removedJobs.length > 1 ? "were" : "was" %> removed</p>
-              <ul>
+              <p><%= company.removedJobs.length %> <%= company.removedJobs.length > 1 ? "jobs were" : "job was" %> removed</p>
+              <ul class="jobs">
                 <% for (const removedJob of company.removedJobs) { %> 
                   <li>
                     <a href=<%= removedJob.url %> >
-                      <p><b><%= removedJob.title %></b> - <%= removedJob.locations %></p>
+                      <b><%= removedJob.title %></b> - <%= removedJob.locations %>
                     </a>
                   </li>
                 <% } %> 
@@ -40,3 +57,4 @@
     <% } %>
   </body>
 </html>
+
