@@ -51,7 +51,14 @@ If we choose option 2, we can also save relevant jobs to a database so that we c
 
 To add a new company, I'll have understand its API and create a function that extracts a list of jobs with the necessary data. I would then modify the main script by adding a company name (to fetch jobs from database) and the function used to fetch data.
 
-### Program Timeline
+### Program Timeline For multiple companies
+
+In this case, I have to decide whether to repeat the one company timeline for all of them, or write a different function that will
+
+* fetch all `prevJobs` in one call and separate them by company
+* Update DB in one call and combine all `newJobs` and `removedJobs` into
+
+### Program Timeline For One Company
 
 For comparing previous jobs to current jobs, we are essentially trying to get the exclusives (only in prevJobs and only in currJobs) in an intersection between thos jobs.
 
@@ -66,8 +73,6 @@ For comparing previous jobs to current jobs, we are essentially trying to get th
 6. Remove `removedJobs` jobs from database
 7. Add `newJobs` jobs to database
 8. Send email with new jobs.
-
-
 
 ### Database
 
